@@ -15,10 +15,15 @@ typedef struct
 /*!
 \brief Allocates memory for a Pin.
 
-\param[in] port PORT to select (0 1 2 3) -> (A B C D)
-\param[in] pin PIN of a PORT to select (0 up to 7)
+\param[in] port PORT to select
+\param[in] pin PIN of a PORT to select
 
-\return SUCCESS: allocated pin
+\pre port >= 0
+\pre port < 4
+\pre pin >= 0
+\pre pin < 8
+
+\return SUCCESS: allocated Pin
 \return Error: 0
 */
 Pin* allocPin(u8 port, u8 pin);
@@ -26,7 +31,13 @@ Pin* allocPin(u8 port, u8 pin);
 /*!
 \brief Frees allocated memory of a Pin.
 
-\param pin pin to be freed; pointer to a pointer pin
+\param[in] pin pin to be freed; pointer to a pointer pin
+
+\pre pin is alloced
+
+\post pin is freed
+
+\mod pin
 */
 void freePin(Pin** pin);
 
