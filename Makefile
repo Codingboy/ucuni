@@ -34,4 +34,7 @@ $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 installdep:
-	$(INSTALL) avr-libc avr-gcc avrdude
+	$(INSTALL) avr-libc avr-gcc avrdude doxygen
+
+doc:
+	doxygen
