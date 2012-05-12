@@ -6,11 +6,12 @@ LIB=lib
 
 RMDIR=rm -rf
 RM=rm -f
-CP=cp
+CP=cp -f
+CPDIR=cp -rf
 ECHO=@echo
-MVDIR=mv -rf
 MV=mv -f
 MKDIR=mkdir -p
+INSTALL=apt-get install -y
 
 CC=avr-gcc
 CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE)
@@ -32,4 +33,5 @@ $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
 	$(MKDIR) $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $<
 
-
+installdep:
+	$(INSTALL) avr-libc avr-gcc avrdude
