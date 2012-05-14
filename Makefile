@@ -13,7 +13,7 @@ MV=mv -f
 MKDIR=mkdir -p
 INSTALL=apt-get install -y
 
-CC=avr-gcc
+CC=gcc-avr
 CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE)
 
 install:
@@ -34,7 +34,7 @@ $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 installdep:
-	$(INSTALL) avr-libc avr-gcc avrdude doxygen
+	$(INSTALL) avr-libc gcc-avr avrdude doxygen binutils-avr
 
 doc:
 	doxygen
