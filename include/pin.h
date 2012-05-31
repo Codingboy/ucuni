@@ -88,11 +88,6 @@ void toggleOutputPin(Pin* pin);
 u8 getInputPin(Pin* pin);
 
 /*!
-///\todo
-*/
-u8 getInputADCPin(Pin* pin);
-
-/*!
 \brief Gets the state of a PIN.
 
 \pre pin shall be specified as output

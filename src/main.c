@@ -1,21 +1,18 @@
 #include "pin.h"
 #include <util/delay.h>
 
-Pin but1* = 0;
-Pin but2* = 0;
-Pin but3* = 0;
-Pin but4* = 0;
+Pin* but1 = 0;
 
 int main(int argc, char* argv[])
 {
-	but1 = allocPin(0, 0);//A0
-	setAsOutputPin(Pin* pin);
+	but1 = allocPin(1, 0);//A0
+	setAsOutputPin(but1);
 	
 	while (1)
 	{
-		setOutputPin(Pin* pin);
+		setOutputPin(but1);
 		_delay_ms(100);
-		clearOutputPin(Pin* pin);
+		clearOutputPin(but1);
 		_delay_ms(900);
 	}
 	freePin(&but1);

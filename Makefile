@@ -12,24 +12,30 @@ ECHO=@echo
 MV=mv -f
 MKDIR=mkdir -p
 INSTALL=apt-get install -y
+CONTROLLER=-mmcu=atmega32u4
+CC=avr-gcc
+MODULES_=main pin pinoperations typedefs
+MODULES=$(addsuffix .o, $(addprefix $(OBJ)/, $(MODULES_)))
+CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) $(CONTROLLER) -DF_CPU=16000000
 
-CC=gcc-avr
-CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE)
+install: $(BIN)/main.hex
+	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U application:w:$<:i
 
-install:
-	avrdude -p m32u4 -P COM3 -c avr109
+main: $(BIN)/main.hex
 
-main: $(BIN)/main
-
-$(BIN)/main:
+$(BIN)/main.elf: $(MODULES)
 	$(MKDIR) $(BIN)
+	$(CC) $(CONTROLLER) -o $@ $^
+
+$(BIN)/main.hex: $(BIN)/main.elf
+	avr-objcopy -j .text -j .data -O ihex $^ $@
 
 clean:
 	$(RMDIR) $(BIN)
 	$(RMDIR) $(OBJ)
 	$(RMDIR) $(LIB)
 
-$(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
+$(OBJ)/%.o: $(SRC)/%.c
 	$(MKDIR) $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $<
 

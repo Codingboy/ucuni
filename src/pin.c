@@ -52,11 +52,6 @@ u8 getInputPin(Pin* pin)
 	return getInput(pin->port, pin->pin);
 }
 
-u8 getInputADCPin(Pin* pin)
-{
-	return getInputADC(pin->port, pin->pin);
-}
-
 u8 getOutputPin(Pin* pin)
 {
 	return getOutput(pin->port, pin->pin);
