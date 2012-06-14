@@ -14,12 +14,12 @@ MKDIR=mkdir -p
 INSTALL=apt-get install -y
 CONTROLLER=-mmcu=atmega32u4
 CC=avr-gcc
-MODULES_=main pin pinoperations typedefs
+MODULES_=main pin pinoperations typedefs led button
 MODULES=$(addsuffix .o, $(addprefix $(OBJ)/, $(MODULES_)))
 CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) $(CONTROLLER) -DF_CPU=16000000
 
 install: $(BIN)/main.hex
-	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U application:w:$<:i
+	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U flash:w:$<:i
 
 main: $(BIN)/main.hex
 
