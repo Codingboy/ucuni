@@ -25,12 +25,17 @@ void enableTime()
 	cli();
 
 	//normal mode
-	TCCR0 &= ~(1<<WGM01);
-	TCCR0 &= ~(1<<WGM00);
+	TCCR0A &= ~(1<<WGM2);
+	TCCR0A &= ~(1<<WGM1);
+	TCCR0A &= ~(1<<WGM0);
 
-	//normal port operation for OC0
-	TCCR0 &= ~(1<<COM01);
-	TCCR0 &= ~(1<<COM00);
+	//normal port operation for OC0A
+	TCCR0A &= ~(1<<COM0A1);
+	TCCR0A &= ~(1<<COM0A0);
+
+	//normal port operation for OC0B
+	TCCR0A &= ~(1<<COM0B1);
+	TCCR0A &= ~(1<<COM0B0);
 
 	//set prescaler to 64
 	TCCR0 &= ~(1<<CS02);
@@ -38,10 +43,10 @@ void enableTime()
 	TCCR0 |= 1<<CS00;
 
 	//preload
-	TCNT0 = 230;
+	TCNT0 = 230;//for 100µs
 
 	//enable overflow interrupts
-	TIMSK |= 1<<TOIE0;
+	TIMSK0 |= 1<<TOIE0;
 
 	//enable interrupts
 	sei();
@@ -53,12 +58,7 @@ void disableTime()
 	cli();
 
 	//disable overflow interrupt
-	TIMSK &= ~(1<<TOIE1);
-
-	//used no clock
-	TCCR0 &= ~(1<<CS12);
-	TCCR0 &= ~(1<<CS11);
-	TCCR0 &= ~(1<<CS10);
+	TIMSK0 &= ~(1<<TOIE0);
 
 	SREG = tmpSREG;
 }
