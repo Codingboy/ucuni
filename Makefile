@@ -14,7 +14,7 @@ MKDIR=mkdir -p
 INSTALL=apt-get install -y
 CONTROLLER=-mmcu=atmega32u4
 CC=avr-gcc
-MODULES_=main pin pinoperations typedefs led button
+MODULES_=main pin pinoperations typedefs led button time
 MODULES=$(addsuffix .o, $(addprefix $(OBJ)/, $(MODULES_)))
 CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) $(CONTROLLER) -DF_CPU=16000000
 

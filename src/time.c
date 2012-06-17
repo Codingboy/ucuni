@@ -25,9 +25,9 @@ void enableTime()
 	cli();
 
 	//normal mode
-	TCCR0A &= ~(1<<WGM2);
-	TCCR0A &= ~(1<<WGM1);
-	TCCR0A &= ~(1<<WGM0);
+	TCCR0B &= ~(1<<WGM02);
+	TCCR0A &= ~(1<<WGM01);
+	TCCR0A &= ~(1<<WGM00);
 
 	//normal port operation for OC0A
 	TCCR0A &= ~(1<<COM0A1);
@@ -38,9 +38,9 @@ void enableTime()
 	TCCR0A &= ~(1<<COM0B0);
 
 	//set prescaler to 64
-	TCCR0 &= ~(1<<CS02);
-	TCCR0 |= 1<<CS01;
-	TCCR0 |= 1<<CS00;
+	TCCR0B &= ~(1<<CS02);
+	TCCR0B |= 1<<CS01;
+	TCCR0B |= 1<<CS00;
 
 	//preload
 	TCNT0 = 230;//for 100µs
