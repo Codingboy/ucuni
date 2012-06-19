@@ -37,3 +37,8 @@ void offLed(Led* led)
 {
 	clearOutputPin(led->pin);
 }
+
+u8 stateLed(Led* led)
+{
+	return getOutputPin(led->pin);
+}

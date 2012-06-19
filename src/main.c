@@ -1,12 +1,15 @@
+#include "main.h"
+#include "globals.h"
 #include "led.h"
 #include "button.h"
 #include <util/delay.h>
 #include <stdlib.h>
 #include "time.h"
+#include <USB.h>
 
-Led* led1 = NULL;
-Led* led2 = NULL;
-Button* but1 = NULL;
+extern Led* led1;
+extern Led* led2;
+extern Button* but1;
 
 ISR(TIMER0_OVF_vect)//each 100µs
 {
@@ -25,7 +28,11 @@ int main(int argc, char* argv[])
 	while (1)
 	{
 		time = getTime();
-		if (time%1000 < 100)
+		if (time > 1000000)
+		{
+			setTime(0);
+		}
+		if (time%1000000 < 100000)
 		{
 			onLed(led1);
 		}
@@ -42,6 +49,7 @@ int main(int argc, char* argv[])
 		{
 			offLed(led2);
 		}
+		USB_USBTask();
 	}
 	freeLed(&led1);
 	freeLed(&led2);
