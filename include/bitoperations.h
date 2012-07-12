@@ -1,3 +1,9 @@
+/*!
+\file bitoperations.h
+\brief Operations to manipulate single bits
+\warning not implemented
+*/
+
 #ifndef BITOPERATIONS_H
 #define BITOPERATIONS_H
 

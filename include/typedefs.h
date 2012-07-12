@@ -1,3 +1,8 @@
+/*!
+\file typedefs.h
+\brief Workaround to write shorter types
+*/
+
 #ifndef TYPEDEFS_H
 #define TYPEDEFS_H
 

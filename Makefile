@@ -11,7 +11,7 @@ ARCH=AVR8
 BOARD=USBKEY
 F_CPU=16000000
 F_USB=$(F_CPU)
-F_CLOCL=$(F_CPU)
+F_CLOCK=$(F_CPU)
 
 RMDIR=rm -rf
 RM=rm -f
@@ -23,9 +23,9 @@ MKDIR=mkdir -p
 INSTALL=apt-get install -y
 CONTROLLER=-mmcu=$(MCU)
 CC=avr-gcc
-MODULES_=main pin pinoperations typedefs led button time usb globals
+MODULES_=main pin pinoperations typedefs led button time usb globals descriptors ez3 servo
 MODULES=$(addsuffix .o, $(addprefix $(OBJ)/, $(MODULES_)))
-CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) -I$(LUFA_PATH)/Drivers/USB $(CONTROLLER) -DF_CPU=$(F_CPU) -DF_USB=$(F_USB) -DMCU=$(MCU) -DARCH=$(ARCH) -DBOARD=$(BOARD) -DF_CLOCK=$(F_CLOCK) -DUSE_FLASH_DESCRIPTORS -DUSE_STATIC_OPTIONS="(USE_DEVICE_OPT_FULLSPEED | USB_OPT_AUTO_PLL)" -DUSB_DEVICE_ONLY
+CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) -I$(LUFA_PATH)/Drivers/USB -I$(LUFA_PATH)/Drivers/USB/Core/AVR8 -I$(LUFA_PATH) $(CONTROLLER) -DF_CPU=$(F_CPU) -DF_USB=$(F_USB) -DMCU=$(MCU) -DARCH=$(ARCH) -DBOARD=$(BOARD) -DF_CLOCK=$(F_CLOCK) -DUSE_FLASH_DESCRIPTORS -DUSE_STATIC_OPTIONS="(USE_DEVICE_OPT_FULLSPEED | USB_OPT_AUTO_PLL)" -DUSB_DEVICE_ONLY
 
 install: $(BIN)/main.hex
 	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U flash:w:$<:i

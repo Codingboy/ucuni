@@ -1,3 +1,8 @@
+/*!
+\file pinoperations.h
+\brief Hardware near operations on ports and pins
+*/
+
 #ifndef PINOPERATIONS_H
 #define PINOPERATIONS_H
 
@@ -9,8 +14,8 @@
 \param[in] port port
 \param[in] pin pin
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
 
@@ -25,8 +30,8 @@ void setAsInput(u8 port, u8 pin);
 \param[in] port port
 \param[in] pin pin
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
 
@@ -41,8 +46,8 @@ void setAsOutput(u8 port, u8 pin);
 \param[in] port port
 \param[in] pin pin
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
 \pre port/pin shall be in outputmode otherwise the pullupresistor is modified
@@ -58,8 +63,8 @@ void setOutput(u8 port, u8 pin);
 \param[in] port port
 \param[in] pin pin
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
 \pre port/pin shall be in outputmode otherwise the pullupresistor is modified
@@ -75,8 +80,8 @@ void clearOutput(u8 port, u8 pin);
 \param[in] port port
 \param[in] pin pin
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
 \pre port/pin shall be in outputmode otherwise the pullupresistor is modified
@@ -92,8 +97,8 @@ void toggleOutput(u8 port, u8 pin);
 \param[in] port port
 \param[in] pin pin
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
 \pre port/pin shall be in inputmode
@@ -101,28 +106,13 @@ void toggleOutput(u8 port, u8 pin);
 u8 getInput(u8 port, u8 pin);
 
 /*!
-\brief Gets the inputstate of an analog pin.
-
-\param[in] port port
-\param[in] pin pin
-
-\pre port >= 0
-\pre port < 4
-\pre pin >= 0
-\pre pin < 8
-\pre port/pin shall be in inputmode
-\todo arguments
-*/
-u8 getInputADC(u8 port, u8 pin);
-
-/*!
 \brief Gets the outputstate of a pin.
 
 \param[in] port port
 \param[in] pin pin
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
 \pre port/pin shall be in outputmode

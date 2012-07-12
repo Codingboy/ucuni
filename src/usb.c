@@ -1,92 +1,37 @@
 #include "usb.h"
 #include "globals.h"
 #include "led.h"
-//#include "main.h"
 #include <USB.h>
-//#include <USBTask.h>
-//#include <StdRequestType.h>
-//#include <Endpoint_AVR8.h>
-//#include <Events.h>
+#include <Endpoint_AVR8.h>
+#include "descriptors.h"
 
 extern Led* led2;
 
-USB_Descriptor_Device_t PROGMEM DeviceDescriptor =
+void EVENT_USB_Device_ControlRequest(void)
 {
-	.Header = {.Size = sizeof(USB_Descriptor_Device_t), .Type = DTYPE_Device},
-	.USBSpecification = VERSION_BCD(02.00),//usb 2.0
-	.Class = 0x0a,//data interface
-	.SubClass = 0x00,//none
-	.Protocol = 0x00,//none
-	.ProductID = 0xdeadc0de,//:D
-	.ReleaseNumber = 42,//:D
-	.VendorID = 0x00000000,//no vendor ID as default
-	//.Endpoint0Size = FIXED_CONTROL_ENDPOINT_SIZE,
-	.Endpoint0Size = ENDPOINT_CONTROLEP_DEFAULT_SIZE,
-	//.NumberOfConfigurations = FIXED_NUM_CONFIGURATIONS,
-	.NumberOfConfigurations = 1,
-	.ManufacturerStrIndex = 0x01,
-	.ProductStrIndex = 0x02,
-	.SerialNumStrIndex = USE_INTERNAL_SERIAL//default serial of the chip or a generated if chip has none
-};
-
-USB_Descriptor_String_t PROGMEM LanguageString =
-{
-	.Header = {.Size = USB_STRING_LEN(1), .Type = DTYPE_String},
-	.UnicodeString = {LANGUAGE_ID_ENG}
-};
-
-USB_Descriptor_String_t PROGMEM ManufacturerString =
-{
-	.Header = {.Size = USB_STRING_LEN(12), .Type = DTYPE_String},
-	.UnicodeString = L"Daniel Tkocz"
-};
-
-USB_Descriptor_String_t PROGMEM ProductString =
-{
-	.Header = {.Size = USB_STRING_LEN(4), .Type = DTYPE_String},
-	.UnicodeString = L"none"
-};
-
-uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue, const uint8_t wIndex, const void** const DescriptorAddress)
-{
-	const uint8_t DescriptorType = wValue>>8;
-	const uint8_t DescriptorNumber = wValue & 0xff;
-	void* Address = NULL;
-	uint16_t Size = NO_DESCRIPTOR;
-	switch (DescriptorType)
+	/* Process UFI specific control requests */
+	switch (USB_ControlRequest.bRequest)
 	{
-		case DTYPE_Device://asked for device
-			Address = (void*) &DeviceDescriptor;
-			Size = sizeof(USB_Descriptor_Device_t);
-			break;
-//		case DTYPE_Configuration:
-//			Address = (void*) &ConfigurationDescriptor;
-//			Size = sizeof(USB_Descriptor_Configuration_t);
-//			break;
-		case DTYPE_String://asked for any string
-			switch (DescriptorNumber)
+		/*case MS_REQ_MassStorageReset:
+			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
 			{
-				case 0x00://language
-					Address = (void*) &LanguageString;
-					Size = pgm_read_byte(&LanguageString.Header.Size);
-					break;
-				case 0x01://manufacturer
-					Address = (void*) &ManufacturerString;
-					Size = pgm_read_byte(&ManufacturerString.Header.Size);
-					break;
-				case 0x02://productname
-					Address = (void*) &ProductString;
-					Size = pgm_read_byte(&ProductString.Header.Size);
-					break;
+				Endpoint_ClearSETUP();
+				Endpoint_ClearStatusStage();
 			}
 			break;
-	}
-	*DescriptorAddress = Address;
-	return Size;
-}
+		case MS_REQ_GetMaxLUN:
+			if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
+			{
+				Endpoint_ClearSETUP();
 
-void EVENT_USB_Device_ControlRequest()
-{
+				//Indicate to the host the number of supported LUNs (virtual disks) on the device
+				Endpoint_Write_8(TOTAL_LUNS - 1);
+
+				Endpoint_ClearIN();
+				Endpoint_ClearStatusStage();
+			}
+			break;*/
+	}
 	if (((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_TYPE) == REQTYPE_CLASS)//request type == class
 		&& ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_DEVICE))//enpoint == device
 	{
@@ -106,10 +51,16 @@ void EVENT_USB_Device_ControlRequest()
 				case GET_LED:
 					usbGetLed();
 					break;
-				///\todo
 			}
 		}
 	}
+
+}
+
+void EVENT_USB_Device_Configuration_Changed()
+{
+	Endpoint_ConfigureEndpoint(IN_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_IN, IO_EPSIZE, ENDPOINT_BANK_SINGLE);
+	Endpoint_ConfigureEndpoint(OUT_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_OUT, IO_EPSIZE, ENDPOINT_BANK_SINGLE);
 }
 
 void usbSetLed()

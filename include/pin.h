@@ -1,3 +1,8 @@
+/*!
+\file pin.h
+\brief Abstraction from the hardware ports and pins.
+*/
+
 #ifndef PIN_H
 #define PIN_H
 
@@ -8,8 +13,8 @@
 */
 typedef struct
 {
-	u8 port;
-	u8 pin;
+	u8 port;///port
+	u8 pin;///pin
 } Pin;
 
 /*!
@@ -18,10 +23,11 @@ typedef struct
 \param[in] port PORT to select
 \param[in] pin PIN of a PORT to select
 
-\pre port >= 0
-\pre port < 4
+\pre port >= 1
+\pre port < 6
 \pre pin >= 0
 \pre pin < 8
+\warning Not all pins are supported for each port! For details watch the atmega32u4 manual. If a non existing pin is selected the behaviour of this function is not defined.
 
 \return SUCCESS: allocated Pin
 \return Error: 0

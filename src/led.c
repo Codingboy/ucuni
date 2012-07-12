@@ -18,6 +18,7 @@ Led* allocLed(u8 port, u8 pin)
 		return NULL;
 	}
 	setAsOutputPin(led->pin);
+	offLed(led);
 	return led;
 }
 
@@ -41,4 +42,16 @@ void offLed(Led* led)
 u8 stateLed(Led* led)
 {
 	return getOutputPin(led->pin);
+}
+
+void toggleLed(Led* led)
+{
+	if (stateLed(led))
+	{
+		offLed(led);
+	}
+	else
+	{
+		onLed(led);
+	}
 }
