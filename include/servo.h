@@ -15,6 +15,7 @@ typedef struct
 	Pin* pin;
 	u16 targetAngleTime;///time to wait to set the target angle
 	u16 actualAngleTime;///time to wait to set the actual angle
+	u8 speed;///speed of the servo
 } Servo;
 
 /*!
@@ -25,7 +26,7 @@ typedef struct
 
 \return allocated servo
 */
-Servo* allocServo(u8 port, u8 pin);
+Servo* allocServo(u8 port, u8 pin, u8 speed);
 
 /*!
 \brief Frees a servo.
@@ -61,8 +62,13 @@ u8 getStateServo(Servo* servo);
 void setStateServo(Servo* servo, u8 degree);
 
 /*!
-\brief Enables the servo.
+\brief Enables servos.
 */
-void enableServo();
+void enableServos();
+
+/*!
+\brief Disables servos.
+*/
+void disableServos();
 
 #endif

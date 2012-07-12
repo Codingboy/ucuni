@@ -4,11 +4,12 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 const u16 _rightAngleTime = 150;///magic
 const u16 _leftAngleTime = 542;///magic
 
-Servo* allocServo(u8 port, u8 pin)
+Servo* allocServo(u8 port, u8 pin, u8 speed)
 {
 	Servo* servo = (Servo*) malloc(sizeof(Servo));
 	if (servo == NULL)
@@ -26,10 +27,11 @@ Servo* allocServo(u8 port, u8 pin)
 	servo->targetAngleTime = (_leftAngleTime-_rightAngleTime)/2 + _rightAngleTime;///time to wait to set the target angle
 	servo->actualAngleTime = servo->targetAngleTime;///time to wait to set the actual angle
 	OCR1A = servo->targetAngleTime;
+	servo->speed = speed;
 	return servo;
 }
 
-void enableServo()
+void enableServos()
 {
 	//normal mode
 	TCCR1A &= ~(1<<COM1A1);
@@ -53,6 +55,11 @@ void enableServo()
 	//TIMSK1 |= 1<<TOIE1;//enable overflow interrupt
 	TIMSK1 |= 1<<OCIE1A;//enable ctc interrupt
 	sei();//enable interrupts
+}
+
+void disableServos()
+{
+	TIMSK1 &= ~(1<<OCIE1A);
 }
 
 void freeServo(Servo** servo)

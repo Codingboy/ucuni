@@ -31,13 +31,27 @@ ISR(TIMER1_COMPA_vect)
 	{
 		if (servo->targetAngleTime < servo->actualAngleTime)
 		{
-			servo->actualAngleTime -= servospeed;
+			if (servo->actualAngleTime-servo->targetAngleTime < servo->speed)
+			{
+				servo->actualAngleTime = servo->targetAngleTime;
+			}
+			else
+			{
+				servo->actualAngleTime -= servo->speed;
+			}
 		}
 		else
 		{
 			if (servo->targetAngleTime > servo->actualAngleTime)
 			{
-				servo->actualAngleTime += servospeed;
+				if (servo->targetAngleTime-servo->actualAngleTime < servo->speed)
+				{
+					servo->actualAngleTime = servo->targetAngleTime;
+				}
+				else
+				{
+					servo->actualAngleTime += servo->speed;
+				}
 			}
 		}
 		setOutputPin(servo->pin);
@@ -55,7 +69,7 @@ int main(int argc, char* argv[])
 	led1 = allocLed(1, 0);//B0
 	led2 = allocLed(1, 1);//B1
 	but1 = allocButton(1, 2);//B2
-	servo = allocServo(1, 4);//B4
+	servo = allocServo(1, 4, 10);//B4
 	bool blink = false;
 	onLed(led1);
 	MCUSR &= ~(1<<WDRF);
@@ -73,11 +87,12 @@ int main(int argc, char* argv[])
 
 	u8 butMutex = 1;
 
-	enableServo();
+	enableServos();
 	setTime(0);
 	enableTime();
 	u64 time;
-u8 magic = 0;
+	u8 magic = 0;
+	u8 left = 1;
 	while (1)
 	{
 		time = getTime();
@@ -98,7 +113,14 @@ u8 magic = 0;
 		u16 dist = 0;
 		if (butState)
 		{
-magic++;
+			if (left)
+			{
+				magic++;
+			}
+			else
+			{
+				magic--;
+			}
 			if (butMutex)
 			{
 				butMutex = 0;
@@ -125,22 +147,42 @@ magic++;
 		{
 			setStateServo(0);
 		}*/
-		switch (magic%5)
+		switch (magic)
 		{
 			case 0:
 				setStateServo(servo, 0);
+				if (!left)
+				{
+					left = 1;
+				}
 				break;
 			case 1:
-				setStateServo(servo, 45);
+				setStateServo(servo, 22);
 				break;
 			case 2:
-				setStateServo(servo, 90);
+				setStateServo(servo, 45);
 				break;
 			case 3:
-				setStateServo(servo, 135);
+				setStateServo(servo, 68);
 				break;
 			case 4:
+				setStateServo(servo, 90);
+				break;
+			case 5:
+				setStateServo(servo, 112);
+				break;
+			case 6:
+				setStateServo(servo, 135);
+				break;
+			case 7:
+				setStateServo(servo, 158);
+				break;
+			case 8:
 				setStateServo(servo, 180);
+				if (left)
+				{
+					left = 0;
+				}
 				break;
 		}
 
