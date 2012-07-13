@@ -8,6 +8,7 @@
 
 #include "pin.h"
 #include "typedefs.h"
+#include <stdbool.h>
 
 typedef struct
 {
@@ -36,9 +37,9 @@ void freeButton(Button** but);
 /*!
 \brief Gets the state of the button if it is pressed.
 
-\return 1 if pressed
-\return 0 if not pressed
+\return true if pressed
+\return false if not pressed
 */
-u8 stateButton(Button* but);
+bool stateButton(Button* but);
 
 #endif

@@ -7,6 +7,7 @@
 #define PIN_H
 
 #include "typedefs.h"
+#include <stdbool.h>
 
 /*!
 \brief Stores a port and a pin.
@@ -89,17 +90,20 @@ void toggleOutputPin(Pin* pin);
 
 \pre pin shall be specified as input
 
-\return state of the PIN
+\return true if high
+\return false if low
 */
-u8 getInputPin(Pin* pin);
+bool getInputPin(Pin* pin);
 
 /*!
 \brief Gets the state of a PIN.
 
 \pre pin shall be specified as output
 
-\return state of the PIN
+\return true if high
+\return false if low
 */
-u8 getOutputPin(Pin* pin);
+bool getOutputPin(Pin* pin);
+
 
 #endif

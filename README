@@ -1,0 +1,7 @@
+How to read the documentation
+
+If you do not know the the code working behind a function very well you shall read each "shall" in its documentation like a "must".
+If you do not do that the behaviour of the program is not defined.
+Each precondition is to be read like a "shall" (-> "must").
+If you are operating on pins the microcontroller does not have (for example C0), the behaviour of the program is not defined.
+In general if you give a function a nullpointer as input the programs behaviour will be undefined if it is not explicitly said that a nullpointer is allowed.

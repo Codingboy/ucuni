@@ -2,6 +2,7 @@
 #include "pin.h"
 #include "typedefs.h"
 #include <stdlib.h>
+#include <stdbool.h>
 
 Led* allocLed(u8 port, u8 pin)
 {
@@ -39,7 +40,7 @@ void offLed(Led* led)
 	clearOutputPin(led->pin);
 }
 
-u8 stateLed(Led* led)
+bool stateLed(Led* led)
 {
 	return getOutputPin(led->pin);
 }

@@ -2,6 +2,7 @@
 #include "typedefs.h"
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdbool.h>
 
 inline void setAsInput(u8 port, u8 pin)
 {
@@ -123,7 +124,7 @@ inline void toggleOutput(u8 port, u8 pin)
 	}
 }
 
-inline u8 getInput(u8 port, u8 pin)
+inline bool getInput(u8 port, u8 pin)
 {
 	switch (port)
 	{
@@ -141,7 +142,7 @@ inline u8 getInput(u8 port, u8 pin)
 	return 0;
 }
 
-inline u8 getOutput(u8 port, u8 pin)
+inline bool getOutput(u8 port, u8 pin)
 {
 	switch (port)
 	{

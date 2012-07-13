@@ -8,6 +8,7 @@
 
 #include "pin.h"
 #include "typedefs.h"
+#include <stdbool.h>
 
 typedef struct
 {
@@ -58,10 +59,10 @@ void offLed(Led* led);
 
 \param[in] led led
 
-\return 1 if led is on
-\reeturn 0 if led is off
+\return true if led is on
+\return false if led is off
 */
-u8 stateLed(Led* led);
+bool stateLed(Led* led);
 
 ///\todo
 void toggleLed(Led* led);

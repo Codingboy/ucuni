@@ -29,6 +29,7 @@ ISR(TIMER1_COMPA_vect)
 {
 	if (!getOutputPin(servo->pin))//off
 	{
+onLed(led2);
 		if (servo->targetAngleTime < servo->actualAngleTime)
 		{
 			if (servo->actualAngleTime-servo->targetAngleTime < servo->speed)
@@ -59,6 +60,7 @@ ISR(TIMER1_COMPA_vect)
 	}
 	else//on
 	{
+offLed(led2);
 		clearOutputPin(servo->pin);
 		OCR1A = 5000;//20ms
 	}
@@ -92,8 +94,8 @@ int main(int argc, char* argv[])
 	enableTime();
 	u64 time;
 	u8 magic = 0;
-	u8 left = 1;
-	while (1)
+	bool left = true;
+	while (true)
 	{
 		time = getTime();
 
@@ -138,22 +140,14 @@ int main(int argc, char* argv[])
 			offLed(led2);
 		}
 
-		//setStateServo(90);
-		/*if (time%(u64)2000000 < (u64)1000000)
-		{
-			setStateServo(180);
-		}
-		else
-		{
-			setStateServo(0);
-		}*/
+		//setStateServo(servo, 0);
 		switch (magic)
 		{
 			case 0:
 				setStateServo(servo, 0);
 				if (!left)
 				{
-					left = 1;
+					left = true;
 				}
 				break;
 			case 1:
@@ -181,7 +175,7 @@ int main(int argc, char* argv[])
 				setStateServo(servo, 180);
 				if (left)
 				{
-					left = 0;
+					left = false;
 				}
 				break;
 		}

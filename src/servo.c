@@ -69,9 +69,23 @@ void freeServo(Servo** servo)
 	*servo = NULL;
 }
 
+u8 getStateServo(Servo* servo)
+{
+	u8 tmpSREG = SREG;
+	cli();
+	u16 diff = _leftAngleTime - _rightAngleTime;
+	float degree = (float)(diff)/(float)(180);
+	float f = (float)(servo->actualAngleTime)/degree;
+	SREG = tmpSREG;
+	return (u8)f;
+}
+
 void setStateServo(Servo* servo, u8 degree)
 {
+//	u8 tmpSREG = SREG;
+//	cli();
 	u16 diff = _leftAngleTime - _rightAngleTime;
 	float f = (float)((float)(degree)*(float)(diff))/(float)(180);
 	servo->targetAngleTime = _rightAngleTime + f;
+//	SREG = tmpSREG;
 }

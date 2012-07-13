@@ -7,6 +7,7 @@
 #define PINOPERATIONS_H
 
 #include "typedefs.h"
+#include <stdbool.h>
 
 /*!
 \brief Sets a pin as input.
@@ -102,8 +103,11 @@ void toggleOutput(u8 port, u8 pin);
 \pre pin >= 0
 \pre pin < 8
 \pre port/pin shall be in inputmode
+
+\return true if high
+\return false if low
 */
-u8 getInput(u8 port, u8 pin);
+bool getInput(u8 port, u8 pin);
 
 /*!
 \brief Gets the outputstate of a pin.
@@ -116,7 +120,10 @@ u8 getInput(u8 port, u8 pin);
 \pre pin >= 0
 \pre pin < 8
 \pre port/pin shall be in outputmode
+
+\return true if high
+\return false if low
 */
-u8 getOutput(u8 port, u8 pin);
+bool getOutput(u8 port, u8 pin);
 
 #endif

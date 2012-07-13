@@ -47,12 +47,12 @@ void toggleOutputPin(Pin* pin)
 	toggleOutput(pin->port, pin->pin);
 }
 
-u8 getInputPin(Pin* pin)
+bool getInputPin(Pin* pin)
 {
 	return getInput(pin->port, pin->pin);
 }
 
-u8 getOutputPin(Pin* pin)
+bool getOutputPin(Pin* pin)
 {
 	return getOutput(pin->port, pin->pin);
 }

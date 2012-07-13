@@ -11,7 +11,8 @@
 extern u8 Vcc;
 extern u8 Vref;
 extern Led* led1;
-//an must be connected to f0
+
+///an must be connected to f0
 EZ3* allocEZ3(u8 rxPort, u8 rxPin, u8 anPort, u8 anPin, u8 pwPort, u8 pwPin)
 {
 	EZ3* ez3 = (EZ3*) malloc(sizeof(EZ3));
@@ -75,7 +76,6 @@ EZ3* allocEZ3(u8 rxPort, u8 rxPin, u8 anPort, u8 anPin, u8 pwPort, u8 pwPin)
 
 u16 measureEZ3(EZ3* ez3)
 {
-offLed(led1);
 	setOutputPin(ez3->rx);
 	_delay_us(20);
 	clearOutputPin(ez3->rx);
@@ -115,7 +115,6 @@ offLed(led1);
 	u16 vin = ADCL;
 	vin += ADCH<<8;
 	float voltage = (float)(vin*1024)/(float)(Vref);
-//onLed(led1);
 	if (voltage < 5)
 	{
 		onLed(led1);

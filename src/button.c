@@ -2,6 +2,7 @@
 #include "typedefs.h"
 #include <stdlib.h>
 #include "pin.h"
+#include <stdbool.h>
 
 Button* allocButton(u8 port, u8 pin)
 {
@@ -28,7 +29,7 @@ void freeButton(Button** but)
 	*but = NULL;
 }
 
-u8 stateButton(Button* but)
+bool stateButton(Button* but)
 {
 	return !getInputPin(but->pin);
 }
