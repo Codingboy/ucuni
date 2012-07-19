@@ -1,6 +1,11 @@
+generelle einführung in den umgang mit den atmegas
 http://www.mikrocontroller.net/articles/AVR-GCC-Tutorial
+
+servo ansteuerung
 http://www.mikrocontroller.net/articles/Modellbauservo_Ansteuerung
+http://www.rn-wissen.de/index.php/Servos
+
+benutzung von lufa und usb generell
 http://tommd.wordpress.com/2009/12/08/lightweight-usb-framework-for-avrs-lufa/
 http://www.avrbeginners.net/new/tutorials/usb-control-transfers-with-lufa/
 http://www.usb.org/developers/devclass_docs/HID1_11.pdf
-http://www.rn-wissen.de/index.php/Servos

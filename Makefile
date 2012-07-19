@@ -5,6 +5,7 @@ OBJ=obj
 LIB=lib
 EXTLIB=extlib
 LUFA_PATH=./$(EXTLIB)/LUFA-120219/LUFA
+DOC=doc
 
 MCU=atmega32u4
 ARCH=AVR8
@@ -58,5 +59,8 @@ $(OBJ)/%.o: $(SRC)/%.c
 installdep:
 	$(INSTALL) avr-libc gcc-avr avrdude doxygen binutils-avr
 
-doc:
+doku: $(DOC)
 	doxygen
+
+$(DOC):
+	doku

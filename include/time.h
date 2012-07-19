@@ -31,7 +31,7 @@ u64 getTime();
 /*!
 \brief Enables timecounting in 100µs steps.
 
-\pre time was set
+\pre time was set to a value (in general 0)
 */
 void enableTime();
 

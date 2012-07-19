@@ -36,6 +36,8 @@ EZ3* allocEZ3(u8 rxPort, u8 rxPin, u8 anPort, u8 anPin, u8 pwPort, u8 pwPin);
 \pre shall first be called 250ms after boot
 \pre ez3 is alloced
 \pre while first call no target shall be in the first 36cm or at least 18cm else targets at this range will not be detected
+\pre time is enabled
+\pre time is not resettet or set to a smaller value while measuring
 
 \return distance in cm
 \return If no target is detected 1024 is returned.

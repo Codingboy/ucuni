@@ -1,6 +1,7 @@
 /*!
 \file pinoperations.h
 \brief Hardware near operations on ports and pins
+\warning Not all pins are supported for each port! For details watch the atmega32u4 manual. If a non existing pin is selected the behaviour of this functions is not defined.
 */
 
 #ifndef PINOPERATIONS_H

@@ -9,7 +9,7 @@ const USB_Descriptor_Configuration_Header_t PROGMEM Config =
 	.ConfigurationNumber = 1,
 	.ConfigurationStrIndex = NO_DESCRIPTOR,
 	.ConfigAttributes = 0,
-	.MaxPowerConsumption = USB_CONFIG_POWER_MA(100)
+	.MaxPowerConsumption = USB_CONFIG_POWER_MA(100)//maximum curret is 100mA
 };
 
 const USB_Descriptor_Device_t PROGMEM DeviceDescriptor =
@@ -20,14 +20,14 @@ const USB_Descriptor_Device_t PROGMEM DeviceDescriptor =
 	.SubClass = 0xff,//could be any
 	.Protocol = 0xff,//my protocol, could be any
 	.ProductID = 0x1337,
-	.ReleaseNumber = VERSION_BCD(00.42),
-	.VendorID = 0x1337,
+	.ReleaseNumber = VERSION_BCD(00.42),//a code version
+	.VendorID = 0x1337,//my vendor id (shall be an official but i have none)
 	//.Endpoint0Size = FIXED_CONTROL_ENDPOINT_SIZE,
 	.Endpoint0Size = ENDPOINT_CONTROLEP_DEFAULT_SIZE,
 	//.NumberOfConfigurations = FIXED_NUM_CONFIGURATIONS,
 	.NumberOfConfigurations = 1,
-	.ManufacturerStrIndex = 0x01,
-	.ProductStrIndex = 0x02,
+	.ManufacturerStrIndex = 0x01,//number of manufacturer string
+	.ProductStrIndex = 0x02,//number of product string
 	.SerialNumStrIndex = USE_INTERNAL_SERIAL//default serial of the chip or a generated if chip has none
 };
 
@@ -40,13 +40,13 @@ const USB_Descriptor_String_t PROGMEM LanguageString =
 const USB_Descriptor_String_t PROGMEM ManufacturerString =
 {
 	.Header = {.Size = USB_STRING_LEN(12), .Type = DTYPE_String},
-	.UnicodeString = L"Daniel Tkocz"
+	.UnicodeString = L"Daniel Tkocz"//L to convert to a unicode string
 };
 
 const USB_Descriptor_String_t PROGMEM ProductString =
 {
 	.Header = {.Size = USB_STRING_LEN(4), .Type = DTYPE_String},
-	.UnicodeString = L"none"
+	.UnicodeString = L"none"//L to convert to a unicode string
 };
 
 const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
@@ -73,7 +73,7 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
 			.InterfaceNumber        = 0,
 			.AlternateSetting       = 0,
 
-			.TotalEndpoints         = 2,
+			.TotalEndpoints         = 2,//number of endpoints
 
 			.Class                  = 0xff,//vendor specific
 			.SubClass               = 0xff,//could be any
