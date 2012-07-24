@@ -64,6 +64,12 @@ void offLed(Led* led);
 */
 bool stateLed(Led* led);
 
-///\todo
+/*!
+\brief Toggles an led.
+
+\param[in] led led
+
+\post led is set to the inverted status
+*/
 void toggleLed(Led* led);
 #endif

@@ -16,8 +16,13 @@
 extern Led* led1;
 extern Led* led2;
 extern Button* but1;
+extern Button* but2;
+extern Button* but3;
 extern Servo* servo;
+extern EZ3* ez3;
 static u8 servospeed = 10;
+
+static bool blink = false;
 
 ISR(TIMER0_OVF_vect)//each 100µs
 {
@@ -29,7 +34,6 @@ ISR(TIMER1_COMPA_vect)
 {
 	if (!getOutputPin(servo->pin))//off
 	{
-onLed(led2);
 		if (servo->targetAngleTime < servo->actualAngleTime)
 		{
 			if (servo->actualAngleTime-servo->targetAngleTime < servo->speed)
@@ -60,9 +64,17 @@ onLed(led2);
 	}
 	else//on
 	{
-offLed(led2);
 		clearOutputPin(servo->pin);
 		OCR1A = 5000;//20ms
+
+		//USB stuff included to minimize overhead and deny a new timer/counter
+		//shall be called each 30 ms
+		//is called each 2X ms
+		USB_USBTask();
+		if (USB_DeviceState == DEVICE_STATE_Configured)
+        {
+			blink = true;
+		}
 	}
 }
 
@@ -71,16 +83,18 @@ int main(int argc, char* argv[])
 	led1 = allocLed(1, 0);//B0
 	led2 = allocLed(1, 1);//B1
 	but1 = allocButton(1, 2);//B2
-	servo = allocServo(1, 4, 10);//B4
-	bool blink = false;
+	but2 = allocButton(3, 0);//D0
+	but3 = allocButton(3, 1);//D1
 	onLed(led1);
 	MCUSR &= ~(1<<WDRF);
 	wdt_disable();
 	clock_prescale_set(clock_div_1);
 	USB_Init();
 	sei();
+	///\warning also usb task!!!
+	servo = allocServo(1, 4, 10);//B4
 
-	EZ3* ez3 = allocEZ3(1,3, 5,0, 3,0);
+	ez3 = allocEZ3(1,3, 5,0, 3,0);
 //B3
 //F0
 //D0
@@ -107,6 +121,7 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
+offLed(led2);
 				offLed(led1);
 			}
 		}
@@ -137,7 +152,7 @@ int main(int argc, char* argv[])
 		else
 		{
 			butMutex = 1;
-			offLed(led2);
+			//offLed(led2);
 		}
 
 		//setStateServo(servo, 0);
@@ -186,7 +201,7 @@ int main(int argc, char* argv[])
 		}
 		blink = true;
 
-Endpoint_SelectEndpoint(IN_EPNUM);
+/*Endpoint_SelectEndpoint(IN_EPNUM);
 if (Endpoint_IsConfigured() && Endpoint_IsINReady() && Endpoint_IsReadWriteAllowed())
 {
 //do_something(state, data, &len);
@@ -203,11 +218,13 @@ if (Endpoint_IsConfigured() && Endpoint_IsOUTReceived() && Endpoint_IsReadWriteA
 Endpoint_ClearOUT();
 }
 
-		USB_USBTask();
+		USB_USBTask();*/
 	}
 	freeLed(&led1);
 	freeLed(&led2);
 	freeButton(&but1);
+	freeButton(&but2);
+	freeButton(&but3);
 	freeEZ3(&ez3);
 	freeServo(&servo);
 	return 0;
