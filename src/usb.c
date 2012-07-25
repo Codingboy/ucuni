@@ -17,7 +17,7 @@ extern EZ3* ez3;
 
 void EVENT_USB_Device_ControlRequest(void)
 {
-	onLed(led2);
+//onLed(led2);
 	/* Process UFI specific control requests */
 	switch (USB_ControlRequest.bRequest)
 	{
@@ -41,8 +41,14 @@ void EVENT_USB_Device_ControlRequest(void)
 			}
 			break;*/
 	}
-	if (((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_TYPE) == REQTYPE_CLASS)//request type == class
-		&& ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_DEVICE))//enpoint == device
+/*	if (1)
+	{
+		//Endpoint_ClearSETUP();//i handle it, NOT lufa
+		//Endpoint_ClearIN();//send message
+		Endpoint_ClearStatusStage();//success :D
+	}*/
+//	if (((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_TYPE) == REQTYPE_CLASS)//request type == class
+//		&& ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_DEVICE))//enpoint == device
 	{
 		if ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_DIRECTION) == REQDIR_HOSTTODEVICE)//host sends
 		{
@@ -75,6 +81,9 @@ void EVENT_USB_Device_ControlRequest(void)
 				case GET_EZ3:
 					usbGetEZ3();
 					break;
+				case GET_SERVO_READY:
+					usbGetServoReady();
+					break;
 			}
 		}
 	}
@@ -82,8 +91,8 @@ void EVENT_USB_Device_ControlRequest(void)
 
 void EVENT_USB_Device_Configuration_Changed()
 {
-	//controlendpoint is configured internally by lufa
-	Endpoint_ConfigureEndpoint(ENDPOINT_CONTROLEP, EP_TYPE_CONTROL, ENDPOINT_DIR_IN, ENDPOINT_CONTROLEP_DEFAULT_SIZE, ENDPOINT_BANK_SINGLE);
+	//controlendpoint is configured internally by lufa with default settings
+	//Endpoint_ConfigureEndpoint(ENDPOINT_CONTROLEP, EP_TYPE_CONTROL, ENDPOINT_DIR_IN, ENDPOINT_CONTROLEP_DEFAULT_SIZE, ENDPOINT_BANK_SINGLE);
 	Endpoint_ConfigureEndpoint(IN_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_IN, IO_EPSIZE, ENDPOINT_BANK_SINGLE);
 	Endpoint_ConfigureEndpoint(OUT_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_OUT, IO_EPSIZE, ENDPOINT_BANK_SINGLE);
 }
@@ -92,6 +101,7 @@ void usbSetLed()
 {
 	Endpoint_ClearSETUP();//i handle it, NOT lufa
 	onLed(led2);
+	Endpoint_ClearOUT();
 	Endpoint_ClearStatusStage();//success :D
 }
 
@@ -100,7 +110,7 @@ void usbGetLed()
 	Endpoint_ClearSETUP();//i handle it, NOT lufa
 	u8 state = stateLed(led2);
 	Endpoint_Write_8(state);
-	Endpoint_ClearIN();//send message
+	Endpoint_ClearOUT();//send message
 	Endpoint_ClearStatusStage();//success :D
 }
 
@@ -155,6 +165,15 @@ void usbGetEZ3()
 	Endpoint_ClearSETUP();//i handle it, NOT lufa
 	u16 state = measureEZ3(ez3);
 	Endpoint_Write_16_BE(state);//write as big endian
-	Endpoint_ClearIN();//send message
+	Endpoint_ClearOUT();//send message
+	Endpoint_ClearStatusStage();//success :D
+}
+
+void usbGetServoReady()
+{
+	Endpoint_ClearSETUP();
+	u8 state = checkReadyServo(servo);
+	Endpoint_Write_8(state);
+	Endpoint_ClearIN();
 	Endpoint_ClearStatusStage();//success :D
 }

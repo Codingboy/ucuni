@@ -67,13 +67,55 @@ ISR(TIMER1_COMPA_vect)
 		clearOutputPin(servo->pin);
 		OCR1A = 5000;//20ms
 
-		//USB stuff included to minimize overhead and deny a new timer/counter
+		//USB stuff included to minimize overhead and deny use of a new timer/counter
 		//shall be called each 30 ms
 		//is called each 2X ms
 		USB_USBTask();
 		if (USB_DeviceState == DEVICE_STATE_Configured)
         {
 			blink = true;
+
+	Endpoint_SelectEndpoint(OUT_EPNUM);
+
+	/* Check to see if a packet has been sent from the host */
+	if (Endpoint_IsOUTReceived())
+	{
+//onLed(led2);
+		/* Check to see if the packet contains data */
+		if (Endpoint_IsReadWriteAllowed())
+		{
+			/* Create a temporary buffer to hold the read in report from the host */
+			//uint8_t GenericData[GENERIC_REPORT_SIZE];
+
+			/* Read Generic Report Data */
+			Endpoint_Read_8();
+
+			/* Process Generic Report Data */
+			//ProcessGenericHIDReport(GenericData);
+		}
+
+		/* Finalize the stream transfer to send the last packet */
+		Endpoint_ClearOUT();
+	}
+
+	Endpoint_SelectEndpoint(IN_EPNUM);
+
+	/* Check to see if the host is ready to accept another packet */
+	if (Endpoint_IsINReady())
+	{
+		/* Create a temporary buffer to hold the report to send to the host */
+		//uint8_t GenericData[GENERIC_REPORT_SIZE];
+
+		/* Create Generic Report Data */
+		//CreateGenericHIDReport(GenericData);
+
+		/* Write Generic Report Data */
+		Endpoint_Write_8(42);
+
+		/* Finalize the stream transfer to send the last packet */
+		Endpoint_ClearIN();
+	}
+
 		}
 	}
 }
@@ -121,7 +163,6 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
-offLed(led2);
 				offLed(led1);
 			}
 		}
@@ -152,7 +193,7 @@ offLed(led2);
 		else
 		{
 			butMutex = 1;
-			//offLed(led2);
+			offLed(led2);
 		}
 
 		//setStateServo(servo, 0);

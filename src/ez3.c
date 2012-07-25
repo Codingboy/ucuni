@@ -11,6 +11,7 @@
 extern u8 Vcc;
 extern u8 Vref;
 extern Led* led1;
+extern Led* led2;
 
 ///an must be connected to f0
 EZ3* allocEZ3(u8 rxPort, u8 rxPin, u8 anPort, u8 anPin, u8 pwPort, u8 pwPin)
@@ -54,16 +55,17 @@ EZ3* allocEZ3(u8 rxPort, u8 rxPin, u8 anPort, u8 anPin, u8 pwPort, u8 pwPin)
 	ADMUX |= 1<<REFS0;
 
 	//select adcpin (see page 308)
+	ADCSRB &= ~(1<<MUX5);
 	ADMUX &= ~(1<<MUX4);
 	ADMUX &= ~(1<<MUX3);
 	ADMUX &= ~(1<<MUX2);
 	ADMUX &= ~(1<<MUX1);
 	ADMUX &= ~(1<<MUX0);
-	ADCSRB &= ~(1<<MUX5);
 
 	ADMUX &= ~(1<<ADLAR);//result right adjusted
 	ADCSRB &= ~(1<<ADHSM);//low speed mode (less power)
 	ADCSRA &= ~(1<<ADATE);//disable autotrigger
+	ADCSRA &= ~(1<<ADIE);//disable adcinterrpt
 
 	//set prescaler to 128
 	ADCSRA |= 1<<ADPS2;
@@ -108,14 +110,14 @@ u16 measureEZ3(EZ3* ez3)
 	return 1024;
 
 	//get result by using the adc
-/*	ADCSRA |= 1<<ADSC;//start adc
+	/*ADCSRA |= 1<<ADSC;//start adc
 	while (ADCSRA & (1<<ADSC))//wait
 	{
 	}
 	u16 vin = ADCL;
 	vin += ADCH<<8;
 	float voltage = (float)(vin*1024)/(float)(Vref);
-	if (voltage < 5)
+	if (voltage < 1000)
 	{
 		onLed(led1);
 	}

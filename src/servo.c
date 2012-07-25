@@ -89,3 +89,8 @@ void setStateServo(Servo* servo, u8 degree)
 	servo->targetAngleTime = _rightAngleTime + f;
 //	SREG = tmpSREG;
 }
+
+bool checkReadyServo(Servo* servo)
+{
+	return servo->targetAngleTime == servo->actualAngleTime;
+}

@@ -9,6 +9,7 @@
 
 #include "pin.h"
 #include "typedefs.h"
+#include <stdbool.h>
 
 typedef struct
 {
@@ -27,6 +28,18 @@ typedef struct
 \return allocated servo
 */
 Servo* allocServo(u8 port, u8 pin, u8 speed);
+
+/*!
+\brief Checks if the servo is in the specified position.
+
+\warning This checks only the softwareside not the real hardwarestate. To keep the drift between software and hardware small use small values for speed.
+
+\pre servo is alloced
+
+\return true if servo is in correct position
+\return false if servo is not on correct position
+*/
+bool checkReadyServo(Servo* servo);
 
 /*!
 \brief Frees a servo.

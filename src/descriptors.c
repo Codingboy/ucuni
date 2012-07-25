@@ -1,5 +1,6 @@
 #include "descriptors.h"
 #include <USB.h>
+#include "globals.h"
 
 const USB_Descriptor_Configuration_Header_t PROGMEM Config =
 {
@@ -86,20 +87,20 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
 		{
 			.Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-			.EndpointAddress        = (ENDPOINT_DIR_IN | MASS_STORAGE_IN_EPNUM),
+			.EndpointAddress        = (ENDPOINT_DIR_IN | IN_EPNUM),
 			.Attributes             = (EP_TYPE_BULK | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-			.EndpointSize           = MASS_STORAGE_IO_EPSIZE,
-			.PollingIntervalMS      = 0x01
+			.EndpointSize           = IO_EPSIZE,
+			.PollingIntervalMS      = 50
 		},
 
 	.DataOutEndpoint =
 		{
 			.Header                 = {.Size = sizeof(USB_Descriptor_Endpoint_t), .Type = DTYPE_Endpoint},
 
-			.EndpointAddress        = (ENDPOINT_DIR_OUT | MASS_STORAGE_OUT_EPNUM),
+			.EndpointAddress        = (ENDPOINT_DIR_OUT | OUT_EPNUM),
 			.Attributes             = (EP_TYPE_BULK | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
-			.EndpointSize           = MASS_STORAGE_IO_EPSIZE,
-			.PollingIntervalMS      = 0x01
+			.EndpointSize           = IO_EPSIZE,
+			.PollingIntervalMS      = 50
 		}
 };
 

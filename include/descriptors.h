@@ -1,3 +1,8 @@
+/*!
+\file descriptors.h
+\brief Configuration of usb descriptors
+*/
+
 #ifndef DESCRIPTORS_H
 #define DESCRIPTORS_H
 
