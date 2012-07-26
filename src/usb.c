@@ -46,8 +46,8 @@ void EVENT_USB_Device_ControlRequest(void)
 				case GET_LED:
 					usbGetLed();
 					break;
-				case GET_BUTTON:
-					usbGetButton();
+				case GET_BUTTONS:
+					usbGetButtons();
 					break;
 				case GET_SERVO:
 					usbGetServo();
@@ -81,11 +81,11 @@ void usbSetLed()
 	u8 recvData = 0;
 	while (recvData < 0)
 	{
-		//while (!Endpoint_IsOUTRecieved())
+		while (!Endpoint_IsOUTReceived())
 		{
 			//wait for data
 		}
-		//Endpoint_ClearOUT();//ack data packet
+		Endpoint_ClearOUT();//ack data packet
 	}
 	onLed(led2);
 	while (!Endpoint_IsINReady())
@@ -97,73 +97,164 @@ void usbSetLed()
 
 void usbGetLed()
 {
-	Endpoint_ClearSETUP();//i handle it, NOT lufa
-	u8 state = stateLed(led2);
-	Endpoint_Write_8(state);
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 sendData = 0;
+	while (sendData < 1)
+	{
+		while (!Endpoint_IsINReady())
+		{
+			//wait until host is ready
+		}
+		u8 state = stateLed(led2);
+		Endpoint_Write_8(state);
+		sendData++;
+		Endpoint_ClearIN();
+	}
+	while (!Endpoint_IsOUTReceived())
+	{
+		//wait for host to send status
+	}
 	Endpoint_ClearOUT();//send message
 	Endpoint_ClearStatusStage();//success :D
 }
 
 void usbClearLed()
 {
-	Endpoint_ClearSETUP();//i handle it, NOT lufa
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 recvData = 0;
+	while (recvData < 0)
+	{
+		while (!Endpoint_IsOUTReceived())
+		{
+			//wait for data
+		}
+		Endpoint_ClearOUT();//ack data packet
+	}
 	offLed(led2);
-	Endpoint_ClearStatusStage();//success :D
+	while (!Endpoint_IsINReady())
+	{
+		//wait until host ready to recv
+	}
+	Endpoint_ClearIN();//ack
 }
 
 void usbSetServo()
 {
-	Endpoint_ClearSETUP();//i handle it, NOT lufa
-	u8 value = Endpoint_Read_8();//read value
-	Endpoint_ClearStatusStage();//success :D
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 recvData = 0;
+	u8 value = 0;
+	while (recvData < 1)
+	{
+		while (!Endpoint_IsOUTReceived())
+		{
+			//wait for data
+		}
+		value = Endpoint_Read_8();//read value
+		recvData++;
+		Endpoint_ClearOUT();//ack data packet
+	}
 	setStateServo(servo, value);
+	while (!Endpoint_IsINReady())
+	{
+		//wait until host ready to recv
+	}
+	Endpoint_ClearIN();//ack
 }
 
 void usbGetServo()
 {
-	Endpoint_ClearSETUP();//i handle it, NOT lufa
-	u8 state = getStateServo(servo);
-	Endpoint_Write_8(state);
-	Endpoint_ClearIN();//send message
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 sendData = 0;
+	while (sendData < 1)
+	{
+		while (!Endpoint_IsINReady())
+		{
+			//wait until host is ready
+		}
+		u8 state = getStateServo(servo);
+		Endpoint_Write_8(state);
+		sendData++;
+		Endpoint_ClearIN();
+	}
+	while (!Endpoint_IsOUTReceived())
+	{
+		//wait for host to send status
+	}
+	Endpoint_ClearOUT();//send message
 	Endpoint_ClearStatusStage();//success :D
 }
 
-void usbGetButton()
+void usbGetButtons()
 {
-	Endpoint_ClearSETUP();//i handle it, NOT lufa
-	u8 value = Endpoint_Read_8();//read value
-	u8 state = 0;
-	switch (value)
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 sendData = 0;
+	while (sendData < 3)
 	{
-		case 1:
-			state = stateButton(but1);
-			break;
-		case 2:
-			state = stateButton(but2);
-			break;
-		case 3:
-			state = stateButton(but3);
-			break;
+		while (!Endpoint_IsINReady())
+		{
+			//wait until host is ready
+		}
+		u8 state = stateButton(but1);;
+		Endpoint_Write_8(state);
+		sendData++;
+		state = stateButton(but2);;
+		Endpoint_Write_8(state);
+		sendData++;
+		state = stateButton(but3);;
+		Endpoint_Write_8(state);
+		sendData++;
+		Endpoint_ClearIN();
 	}
-	Endpoint_Write_8(state);
-	Endpoint_ClearIN();//send message
+	while (!Endpoint_IsOUTReceived())
+	{
+		//wait for host to send status
+	}
+	Endpoint_ClearOUT();//send message
 	Endpoint_ClearStatusStage();//success :D
 }
 
 void usbGetEZ3()
 {
-	Endpoint_ClearSETUP();//i handle it, NOT lufa
-	u16 state = measureEZ3(ez3);
-	Endpoint_Write_16_BE(state);//write as big endian
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 sendData = 0;
+	while (sendData < 2)
+	{
+		while (!Endpoint_IsINReady())
+		{
+			//wait until host is ready
+		}
+		u16 state = measureEZ3(ez3);
+		Endpoint_Write_16_BE(state);//write as big endian
+		sendData += 2;
+		Endpoint_ClearIN();
+	}
+	while (!Endpoint_IsOUTReceived())
+	{
+		//wait for host to send status
+	}
 	Endpoint_ClearOUT();//send message
 	Endpoint_ClearStatusStage();//success :D
 }
 
 void usbGetServoReady()
 {
-	Endpoint_ClearSETUP();
-	u8 state = checkReadyServo(servo);
-	Endpoint_Write_8(state);
-	Endpoint_ClearIN();
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 sendData = 0;
+	while (sendData < 1)
+	{
+		while (!Endpoint_IsINReady())
+		{
+			//wait until host is ready
+		}
+		u8 state = checkReadyServo(servo);
+		Endpoint_Write_8(state);
+		sendData++;
+		Endpoint_ClearIN();
+	}
+	while (!Endpoint_IsOUTReceived())
+	{
+		//wait for host to send status
+	}
+	Endpoint_ClearOUT();//send message
 	Endpoint_ClearStatusStage();//success :D
 }

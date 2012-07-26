@@ -241,25 +241,6 @@ int main(int argc, char* argv[])
 			continue;
 		}
 		blink = true;
-
-/*Endpoint_SelectEndpoint(IN_EPNUM);
-if (Endpoint_IsConfigured() && Endpoint_IsINReady() && Endpoint_IsReadWriteAllowed())
-{
-//do_something(state, data, &len);
-//err = Endpoint_Write_Stream_LE((void *)data, len);
-// FIXME handle err
-Endpoint_ClearIN();
-}
-
-Endpoint_SelectEndpoint(OUT_EPNUM);
-if (Endpoint_IsConfigured() && Endpoint_IsOUTReceived() && Endpoint_IsReadWriteAllowed())
-{
-//err = Endpoint_Read_Stream_LE(data, len);
-//do_other_thing(data, len);
-Endpoint_ClearOUT();
-}
-
-		USB_USBTask();*/
 	}
 	freeLed(&led1);
 	freeLed(&led2);

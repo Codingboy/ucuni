@@ -10,3 +10,7 @@ http://tommd.wordpress.com/2009/12/08/lightweight-usb-framework-for-avrs-lufa/
 http://www.avrbeginners.net/new/tutorials/usb-control-transfers-with-lufa/
 http://www.usb.org/developers/devclass_docs/HID1_11.pdf
 https://groups.google.com/forum/?fromgroups#!topic/lufa-support/MQh2NR9BMgY
+
+libusb
+http://fpga4u.epfl.ch/images/2/24/Libusb_Developers_Guide_vers0_1.pdf
+http://www.lvr.com/beagleboard.htm
