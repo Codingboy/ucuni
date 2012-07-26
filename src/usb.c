@@ -18,35 +18,6 @@ extern EZ3* ez3;
 void EVENT_USB_Device_ControlRequest(void)
 {
 //onLed(led2);
-	/* Process UFI specific control requests */
-	switch (USB_ControlRequest.bRequest)
-	{
-		/*case MS_REQ_MassStorageReset:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
-				Endpoint_ClearStatusStage();
-			}
-			break;
-		case MS_REQ_GetMaxLUN:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
-
-				//Indicate to the host the number of supported LUNs (virtual disks) on the device
-				Endpoint_Write_8(TOTAL_LUNS - 1);
-
-				Endpoint_ClearIN();
-				Endpoint_ClearStatusStage();
-			}
-			break;*/
-	}
-/*	if (1)
-	{
-		//Endpoint_ClearSETUP();//i handle it, NOT lufa
-		//Endpoint_ClearIN();//send message
-		Endpoint_ClearStatusStage();//success :D
-	}*/
 //	if (((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_TYPE) == REQTYPE_CLASS)//request type == class
 //		&& ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_DEVICE))//enpoint == device
 	{
@@ -63,6 +34,9 @@ void EVENT_USB_Device_ControlRequest(void)
 				case SET_SERVO:
 					usbSetServo();
 					break;
+//				default:
+//					Endpoint_ClearStatusStage();
+//					break;
 			}
 		}
 		else//device sends
@@ -84,6 +58,9 @@ void EVENT_USB_Device_ControlRequest(void)
 				case GET_SERVO_READY:
 					usbGetServoReady();
 					break;
+//				default:
+//					Endpoint_ClearStatusStage();
+//					break;
 			}
 		}
 	}
@@ -93,16 +70,29 @@ void EVENT_USB_Device_Configuration_Changed()
 {
 	//controlendpoint is configured internally by lufa with default settings
 	//Endpoint_ConfigureEndpoint(ENDPOINT_CONTROLEP, EP_TYPE_CONTROL, ENDPOINT_DIR_IN, ENDPOINT_CONTROLEP_DEFAULT_SIZE, ENDPOINT_BANK_SINGLE);
+	///\todo do i need those endpoints?
 	Endpoint_ConfigureEndpoint(IN_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_IN, IO_EPSIZE, ENDPOINT_BANK_SINGLE);
 	Endpoint_ConfigureEndpoint(OUT_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_OUT, IO_EPSIZE, ENDPOINT_BANK_SINGLE);
 }
 
 void usbSetLed()
 {
-	Endpoint_ClearSETUP();//i handle it, NOT lufa
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 recvData = 0;
+	while (recvData < 0)
+	{
+		//while (!Endpoint_IsOUTRecieved())
+		{
+			//wait for data
+		}
+		//Endpoint_ClearOUT();//ack data packet
+	}
 	onLed(led2);
-	Endpoint_ClearOUT();
-	Endpoint_ClearStatusStage();//success :D
+	while (!Endpoint_IsINReady())
+	{
+		//wait until host ready to recv
+	}
+	Endpoint_ClearIN();//ack
 }
 
 void usbGetLed()

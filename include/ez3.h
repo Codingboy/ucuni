@@ -55,4 +55,11 @@ u16 measureEZ3(EZ3* ez3);
 */
 void freeEZ3(EZ3** ez3);
 
+/*!
+\brief Initializes the sensor.
+
+\pre pins must be the correct ones -> see implementation
+*/
+void initEZ3();
+
 #endif

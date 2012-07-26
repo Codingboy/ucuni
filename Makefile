@@ -24,7 +24,7 @@ MKDIR=mkdir -p
 INSTALL=apt-get install -y
 CONTROLLER=-mmcu=$(MCU)
 CC=avr-gcc
-MODULES_=main pin pinoperations typedefs led button time usb globals descriptors ez3 servo
+MODULES_=main pin pinoperations typedefs led button time usb globals descriptors ez3 servo temperature
 MODULES=$(addsuffix .o, $(addprefix $(OBJ)/, $(MODULES_)))
 CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) -I$(LUFA_PATH)/Drivers/USB -I$(LUFA_PATH)/Drivers/USB/Core/AVR8 -I$(LUFA_PATH) $(CONTROLLER) -DF_CPU=$(F_CPU) -DF_USB=$(F_USB) -DMCU=$(MCU) -DARCH=$(ARCH) -DBOARD=$(BOARD) -DF_CLOCK=$(F_CLOCK) -DUSE_FLASH_DESCRIPTORS -DUSE_STATIC_OPTIONS="(USE_DEVICE_OPT_FULLSPEED | USB_OPT_AUTO_PLL)" -DUSB_DEVICE_ONLY
 

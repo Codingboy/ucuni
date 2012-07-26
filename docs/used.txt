@@ -9,3 +9,4 @@ benutzung von lufa und usb generell
 http://tommd.wordpress.com/2009/12/08/lightweight-usb-framework-for-avrs-lufa/
 http://www.avrbeginners.net/new/tutorials/usb-control-transfers-with-lufa/
 http://www.usb.org/developers/devclass_docs/HID1_11.pdf
+https://groups.google.com/forum/?fromgroups#!topic/lufa-support/MQh2NR9BMgY

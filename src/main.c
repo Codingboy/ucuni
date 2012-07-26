@@ -75,12 +75,12 @@ ISR(TIMER1_COMPA_vect)
         {
 			blink = true;
 
+///\todo do i need those endpoints?
 	Endpoint_SelectEndpoint(OUT_EPNUM);
 
 	/* Check to see if a packet has been sent from the host */
 	if (Endpoint_IsOUTReceived())
 	{
-//onLed(led2);
 		/* Check to see if the packet contains data */
 		if (Endpoint_IsReadWriteAllowed())
 		{

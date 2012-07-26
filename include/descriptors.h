@@ -1,6 +1,7 @@
 /*!
 \file descriptors.h
 \brief Configuration of usb descriptors
+Documentation is contained in usb.h because thiese modules work together very tight.
 */
 
 #ifndef DESCRIPTORS_H

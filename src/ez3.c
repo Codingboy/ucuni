@@ -50,6 +50,13 @@ EZ3* allocEZ3(u8 rxPort, u8 rxPin, u8 anPort, u8 anPin, u8 pwPort, u8 pwPin)
 	setAsInputPin(ez3->pw);
 	clearOutputPin(ez3->rx);
 
+	initEZ3();
+
+	return ez3;
+}
+
+void initEZ3()
+{
 	//AVcc as reference with external capacitor on AREF pin
 	ADMUX &= ~(1<<REFS1);
 	ADMUX |= 1<<REFS0;
@@ -65,15 +72,12 @@ EZ3* allocEZ3(u8 rxPort, u8 rxPin, u8 anPort, u8 anPin, u8 pwPort, u8 pwPin)
 	ADMUX &= ~(1<<ADLAR);//result right adjusted
 	ADCSRB &= ~(1<<ADHSM);//low speed mode (less power)
 	ADCSRA &= ~(1<<ADATE);//disable autotrigger
-	ADCSRA &= ~(1<<ADIE);//disable adcinterrpt
+	ADCSRA &= ~(1<<ADIE);//disable adcinterrupt
 
 	//set prescaler to 128
 	ADCSRA |= 1<<ADPS2;
 	ADCSRA |= 1<<ADPS1;
 	ADCSRA |= 1<<ADPS0;
-
-	ADCSRA |= 1<<ADEN;//enable adc
-	return ez3;
 }
 
 u16 measureEZ3(EZ3* ez3)
@@ -109,18 +113,18 @@ u16 measureEZ3(EZ3* ez3)
 	}
 	return 1024;
 
+	///\debug adc
 	//get result by using the adc
-	/*ADCSRA |= 1<<ADSC;//start adc
+	/*ADCSRA |= 1<<ADEN;//enable adc
+	ADCSRA |= 1<<ADSC;//start adc
 	while (ADCSRA & (1<<ADSC))//wait
 	{
 	}
 	u16 vin = ADCL;
-	vin += ADCH<<8;
-	float voltage = (float)(vin*1024)/(float)(Vref);
-	if (voltage < 1000)
-	{
-		onLed(led1);
-	}
+	u16 vin2 = ADCH;
+	ADCSRA &= ~(1<<ADEN);//disable adc to save power
+	vin += vin2<<8;
+	float voltage = (float)(vin*Vref)/(float)(1024);
 	u16 inch = Vcc/(512*voltage);
 	u16 cm = inch*2.54;
 	return cm;*/

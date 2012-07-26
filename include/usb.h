@@ -42,5 +42,6 @@ void usbSetServo();
 void usbGetServo();
 void usbGetButton();
 void usbGetEZ3();
+void usbGetServoReady();
 
 #endif
