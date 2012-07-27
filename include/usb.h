@@ -5,6 +5,9 @@ All communication is done by control-transfers.
 Syntax is the following:
 [Controlnumber][data]
 
+bmRequestType shall be 0x21
+bRequest shall be SET_LED or CLEAR_LED etc.
+
 [SET_LED]
 [CLEAR_LED]
 [GET_LED]
