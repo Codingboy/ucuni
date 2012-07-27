@@ -18,8 +18,8 @@ extern EZ3* ez3;
 void EVENT_USB_Device_ControlRequest(void)
 {
 //onLed(led2);
-//	if (((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_TYPE) == REQTYPE_CLASS)//request type == class
-//		&& ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_DEVICE))//enpoint == device
+//	if (((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_TYPE) == REQTYPE_VENDOR)//type == vendor
+//		&& ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_DEVICE))//recipient == device
 	{
 		if ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_DIRECTION) == REQDIR_HOSTTODEVICE)//host sends
 		{
@@ -77,6 +77,8 @@ void EVENT_USB_Device_Configuration_Changed()
 
 void usbSetLed()
 {
+	//Endpoint_ClearSETUP();
+	//Endpoint_ClearStatusStage();
 	Endpoint_ClearSETUP();//ack setup packet
 	u8 recvData = 0;
 	while (recvData < 0)

@@ -17,7 +17,7 @@ const USB_Descriptor_Device_t PROGMEM DeviceDescriptor =
 {
 	.Header = {.Size = sizeof(USB_Descriptor_Device_t), .Type = DTYPE_Device},
 	.USBSpecification = VERSION_BCD(02.00),//usb 2.0
-	.Class = 0xff,//vendor specific
+	.Class = 0x03,//vendor specific edited to hid
 	.SubClass = 0xff,//could be any
 	.Protocol = 0xff,//my protocol, could be any
 	.ProductID = 0x1337,

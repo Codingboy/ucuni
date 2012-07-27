@@ -42,7 +42,7 @@ lufa: $(LIB)/liblufa.a
 
 $(LIB)/liblufa.a:
 	$(MKDIR) $(LIB)
-	$(CP) $(EXTLIB)/LUFA-120219/Demos/Device/LowLevel/Keyboard/libKeyboard.a $@
+	$(CP) $(EXTLIB)/liblufa.a $@
 
 $(BIN)/main.elf: $(MODULES) $(OBJ)/main.o
 	make lufa
