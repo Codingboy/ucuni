@@ -24,14 +24,19 @@ MKDIR=mkdir -p
 INSTALL=apt-get install -y
 CONTROLLER=-mmcu=$(MCU)
 CC=avr-gcc
-MODULES_=main pin pinoperations typedefs led button time usb globals descriptors ez3 servo temperature
+MODULES_=pin pinoperations typedefs led button time usb globals descriptors ez3 servo temperature
 MODULES=$(addsuffix .o, $(addprefix $(OBJ)/, $(MODULES_)))
 CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) -I$(LUFA_PATH)/Drivers/USB -I$(LUFA_PATH)/Drivers/USB/Core/AVR8 -I$(LUFA_PATH) $(CONTROLLER) -DF_CPU=$(F_CPU) -DF_USB=$(F_USB) -DMCU=$(MCU) -DARCH=$(ARCH) -DBOARD=$(BOARD) -DF_CLOCK=$(F_CLOCK) -DUSE_FLASH_DESCRIPTORS -DUSE_STATIC_OPTIONS="(USE_DEVICE_OPT_FULLSPEED | USB_OPT_AUTO_PLL)" -DUSB_DEVICE_ONLY
 
-install: $(BIN)/main.hex
+installdemo: $(BIN)/demo.hex
+	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U flash:w:$<:i
+
+installmain: $(BIN)/main.hex
 	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U flash:w:$<:i
 
 main: $(BIN)/main.hex
+
+demo: $(BIN)/demo.hex
 
 lufa: $(LIB)/liblufa.a
 
@@ -39,12 +44,20 @@ $(LIB)/liblufa.a:
 	$(MKDIR) $(LIB)
 	$(CP) $(EXTLIB)/LUFA-120219/Demos/Device/LowLevel/Keyboard/libKeyboard.a $@
 
-$(BIN)/main.elf: $(MODULES)
+$(BIN)/main.elf: $(MODULES) $(OBJ)/main.o
+	make lufa
+	$(MKDIR) $(BIN)
+	$(CC) $(CONTROLLER) -o $@ $^ -L$(LIB) -llufa
+
+$(BIN)/demo.elf: $(MODULES) $(OBJ)/demo.o
 	make lufa
 	$(MKDIR) $(BIN)
 	$(CC) $(CONTROLLER) -o $@ $^ -L$(LIB) -llufa
 
 $(BIN)/main.hex: $(BIN)/main.elf
+	avr-objcopy -j .text -j .data -O ihex $^ $@
+
+$(BIN)/demo.hex: $(BIN)/demo.elf
 	avr-objcopy -j .text -j .data -O ihex $^ $@
 
 clean:

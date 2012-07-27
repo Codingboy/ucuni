@@ -1,4 +1,4 @@
-#include "main.h"
+#include "demo.h"
 #include "globals.h"
 #include "led.h"
 #include "button.h"
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
 	clock_prescale_set(clock_div_1);
 	USB_Init();
 	sei();
-	///\warning also usb task is started and executed!!!
+	///\warning also usb task!!!
 	servo = allocServo(1, 4, 10);//B4
 
 	ez3 = allocEZ3(1,3, 5,0, 3,0);
@@ -141,6 +141,8 @@ int main(int argc, char* argv[])
 //D0
 	_delay_ms(250);
 	measureEZ3(ez3);//calibration
+
+	u8 butMutex = 1;
 
 	enableServos();
 	setTime(0);
@@ -162,6 +164,75 @@ int main(int argc, char* argv[])
 			{
 				offLed(led1);
 			}
+		}
+
+		u8 butState = stateButton(but1);
+		u16 dist = 0;
+		if (butState)
+		{
+			if (left)
+			{
+				magic++;
+			}
+			else
+			{
+				magic--;
+			}
+			if (butMutex)
+			{
+				butMutex = 0;
+				dist = measureEZ3(ez3);
+				if (dist < 30)
+				{
+					onLed(led2);
+				}
+				_delay_ms(100);//prevent prelling
+			}
+		}
+		else
+		{
+			butMutex = 1;
+			offLed(led2);
+		}
+
+		//setStateServo(servo, 0);
+		switch (magic)
+		{
+			case 0:
+				setStateServo(servo, 0);
+				if (!left)
+				{
+					left = true;
+				}
+				break;
+			case 1:
+				setStateServo(servo, 22);
+				break;
+			case 2:
+				setStateServo(servo, 45);
+				break;
+			case 3:
+				setStateServo(servo, 68);
+				break;
+			case 4:
+				setStateServo(servo, 90);
+				break;
+			case 5:
+				setStateServo(servo, 112);
+				break;
+			case 6:
+				setStateServo(servo, 135);
+				break;
+			case 7:
+				setStateServo(servo, 158);
+				break;
+			case 8:
+				setStateServo(servo, 180);
+				if (left)
+				{
+					left = false;
+				}
+				break;
 		}
 
 		if (USB_DeviceState != DEVICE_STATE_Configured)
