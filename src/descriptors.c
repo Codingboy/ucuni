@@ -46,8 +46,8 @@ const USB_Descriptor_String_t PROGMEM ManufacturerString =
 
 const USB_Descriptor_String_t PROGMEM ProductString =
 {
-	.Header = {.Size = USB_STRING_LEN(4), .Type = DTYPE_String},
-	.UnicodeString = L"none"//L to convert to a unicode string
+	.Header = {.Size = USB_STRING_LEN(11), .Type = DTYPE_String},
+	.UnicodeString = L"Pipebreaker"//L to convert to a unicode string
 };
 
 const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =

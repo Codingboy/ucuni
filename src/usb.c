@@ -1,4 +1,5 @@
 #include "usb.h"
+
 #include "globals.h"
 #include "led.h"
 #include <USB.h>
@@ -117,7 +118,8 @@ void usbGetLed()
 		//wait for host to send status
 	}
 	Endpoint_ClearOUT();//send message
-	Endpoint_ClearStatusStage();//success :D
+	//rumgefrickel, works without this function dont know why
+	//Endpoint_ClearStatusStage();//success :D
 }
 
 void usbClearLed()
@@ -178,12 +180,12 @@ void usbGetServo()
 		sendData++;
 		Endpoint_ClearIN();
 	}
-	while (!Endpoint_IsOUTReceived())
+	//while (!Endpoint_IsOUTReceived())
 	{
 		//wait for host to send status
 	}
-	Endpoint_ClearOUT();//send message
-	Endpoint_ClearStatusStage();//success :D
+	//Endpoint_ClearOUT();//send message
+	//Endpoint_ClearStatusStage();//success :D
 }
 
 void usbGetButtons()
@@ -207,12 +209,12 @@ void usbGetButtons()
 		sendData++;
 		Endpoint_ClearIN();
 	}
-	while (!Endpoint_IsOUTReceived())
+	//while (!Endpoint_IsOUTReceived())
 	{
 		//wait for host to send status
 	}
-	Endpoint_ClearOUT();//send message
-	Endpoint_ClearStatusStage();//success :D
+	//Endpoint_ClearOUT();//send message
+	//Endpoint_ClearStatusStage();//success :D
 }
 
 void usbGetEZ3()
@@ -230,12 +232,12 @@ void usbGetEZ3()
 		sendData += 2;
 		Endpoint_ClearIN();
 	}
-	while (!Endpoint_IsOUTReceived())
+	//while (!Endpoint_IsOUTReceived())
 	{
 		//wait for host to send status
 	}
-	Endpoint_ClearOUT();//send message
-	Endpoint_ClearStatusStage();//success :D
+	//Endpoint_ClearOUT();//send message
+	//Endpoint_ClearStatusStage();//success :D
 }
 
 void usbGetServoReady()
@@ -253,10 +255,10 @@ void usbGetServoReady()
 		sendData++;
 		Endpoint_ClearIN();
 	}
-	while (!Endpoint_IsOUTReceived())
+	//while (!Endpoint_IsOUTReceived())
 	{
 		//wait for host to send status
 	}
-	Endpoint_ClearOUT();//send message
-	Endpoint_ClearStatusStage();//success :D
+	//Endpoint_ClearOUT();//send message
+	//Endpoint_ClearStatusStage();//success :D
 }

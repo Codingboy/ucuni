@@ -62,4 +62,24 @@ void freeEZ3(EZ3** ez3);
 */
 void initEZ3();
 
+/*!
+\brief Measures the distance from 2 EZ3 to objects.
+
+\param[in] ez31 first EZ3
+\param[in] ez32 second EZ3
+\param[out result1 result for ez31
+\param[out result2 result for ez32
+
+\pre shall first be called 250ms after boot
+\pre ez31 is alloced
+\pre ez32 is alloced
+\pre while first call no target shall be in the first 36cm or at least 18cm else targets at this range will not be detected
+\pre time is enabled
+\pre time is not resettet or set to a smaller value while measuring
+
+\post result1 contains result of ez31
+\post result2 contains result of ez32
+*/
+void measure2EZ3(EZ3* ez31, EZ3* ez32, u16* result1, u16* result2);
+
 #endif

@@ -23,7 +23,10 @@ Sets the servo to an angle. 0 means it "looks" right, 180 left, 90 straight ahea
 [GET_SERVO_READY]
 Checks if the servo is in the specified position. If it is not ready the returned data (1 byte) is 0.
 
-The device registers as a vendorspecific evice. The vendor id is 0x1337, the device id is also 0x1337.
+The device registers as a humaninterfacedevice. The vendor id is 0x1337, the device id is also 0x1337. Protocol is self made. For detailed informations connect the device and enter lsusb -v to get a lot information. Otherwise you can browse the file descriptors.c where all those things are defined. he device itself registers as a USB 1.1 device.
+It was first implemented as vendorspecific device. So if anywhere you read vendorspecific device it shall be human interface device.
+
+\warning Those functions are coded with try and error. Not all functions are sending an ACK. If a call causes an error, recall it. For more success the ultrasonic sensor only detects objects up to 1m.
 */
 
 #ifndef USB_H

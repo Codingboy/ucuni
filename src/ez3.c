@@ -80,13 +80,82 @@ void initEZ3()
 	ADCSRA |= 1<<ADPS0;
 }
 
+void measure2EZ3(EZ3* ez31, EZ3* ez32, u16* result1, u16* result2)
+{
+	setOutputPin(ez31->rx);
+	setOutputPin(ez32->rx);
+	_delay_us(20);
+	clearOutputPin(ez31->rx);
+	clearOutputPin(ez32->rx);
+	while (true)
+	{
+		if (getInputPin(ez31->pw))
+		{
+			break;
+		}
+	}
+	while (true)
+	{
+		if (getInputPin(ez32->pw))
+		{
+			break;
+		}
+	}
+	u64 time1 = getTime();
+	u64 time2 = time1;
+	bool ready1 = false;
+	bool ready2 = false;
+	*result1 = 1024;//defaultresult
+	*result2 = 1024;//defaultresult
+	while (true)
+	{
+		time2 = getTime();
+		u64 diff = time2 - time1;
+		if (diff >= (u64)(37500))
+		{
+			ready1 = true;
+			ready2 = true;
+		}
+		if (!ready1)
+		{
+			if (!getInputPin(ez31->pw))
+			{
+				u16 inch = diff/147;//convert measured time to a distance
+				if (diff%147 >= 147/2)//round mathematical correct
+				{
+					inch++;
+				}
+				u16 cm = 2.54*inch;//convert to cm
+				*result1 = cm;
+				ready1 = true;
+			}
+		}
+		if (!ready2)
+		{
+			if (!getInputPin(ez32->pw))
+			{
+				u16 inch = diff/147;//convert measured time to a distance
+				if (diff%147 >= 147/2)//round mathematical correct
+				{
+					inch++;
+				}
+				u16 cm = 2.54*inch;//convert to cm
+				*result2 = cm;
+				ready2 = true;
+			}
+		}
+		if (ready1 && ready2)//both ez3 finish
+		{
+			break;
+		}
+	}
+}
+
 u16 measureEZ3(EZ3* ez3)
 {
 	setOutputPin(ez3->rx);
 	_delay_us(20);
 	clearOutputPin(ez3->rx);
-	u64 time1 = getTime();
-	u64 time2 = time1;
 	while (true)
 	{
 		if (getInputPin(ez3->pw))
@@ -94,20 +163,22 @@ u16 measureEZ3(EZ3* ez3)
 			break;
 		}
 	}
+	u64 time1 = getTime();
+	u64 time2 = time1;
 
 	//get the result b measuring the time
 	while (true)///\todo replace by pwm
 	{
 		time2 = getTime();
 		u64 diff = time2 - time1;
-		if (diff >= (u64)(37500))
+		//if (diff >= (u64)(37500))
+		if (diff >= (u64)(5787))
 		{
 			return 1024;
 		}
 		if (!getInputPin(ez3->pw))
 		{
-			u16 inch = diff/147;
-			u16 cm = 2.54*inch;
+			u16 cm = (diff*2.54)/147;//convert measured time to a distance
 			return cm;
 		}
 	}

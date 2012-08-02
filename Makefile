@@ -72,7 +72,7 @@ $(OBJ)/%.o: $(SRC)/%.c
 installdep:
 	$(INSTALL) avr-libc gcc-avr avrdude doxygen binutils-avr
 
-doku: $(DOC)
+doku: $(INCLUDE)/ $(DOC)/html/index.html
 	doxygen
 
 $(DOC):

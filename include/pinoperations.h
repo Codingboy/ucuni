@@ -2,6 +2,7 @@
 \file pinoperations.h
 \brief Hardware near operations on ports and pins
 \warning Not all pins are supported for each port! For details watch the atmega32u4 manual. If a non existing pin is selected the behaviour of this functions is not defined.
+\deprecated Use of this functions is not recommended. Instead use the functions defined in pin.h that have a better abstraction.
 */
 
 #ifndef PINOPERATIONS_H

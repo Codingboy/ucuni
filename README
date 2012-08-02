@@ -1,8 +1,21 @@
-How to read the documentation
+Im Makefile gibt es verschiedene Optionen, das Projekt zu bauen.
 
-If you do not know the the code working behind a function very well you shall read each "shall" in its documentation like a "must".
-If you do not do that the behaviour of the program is not defined.
-Each precondition is to be read like a "shall" (-> "must").
-If you are operating on pins the microcontroller does not have (for example C0), the behaviour of the program is not defined.
-In general if you give a function a nullpointer as input the programs behaviour will be undefined if it is not explicitly said that a nullpointer is allowed.
-Better only use the functions and do not manipulate the atmega register in your own. It may have sideeffects to some functions and the behaviour will be undefined.
+make demo
+bewirkt, dass ein Demoprojekt gebaut wird, das ohne USB-Interface die Funktionalität der Hardware testet.
+Led1 wird leuchtet bis USB initialisiert, falls dies fehlschlägt bitte resetten.
+Button1 bewirkt messen des Ultraschallsensors. Solange der Knopf gedrückt bleibt und die Distanz vom Ultraschallsensor zu einem Objekt zum Zeitpunkt des Drückens kleiner 30 cm ist leuchtet Led2. Beim Drücken des Buttons ändert sich auch die Position des Servos um ~22,25 Grad.
+
+make main
+bewirkt bauen des eigentlichen Projekts, dass ausschließlich über das USB-Interface angesprochen werden kann. (siehe usb.h doku)
+
+make doku
+bewirkt bauen der Dokumentation im Ordner doc als html latex und manpage
+
+installmain und installdemo
+flashen die jeweilige Projektversion.
+
+installdep
+installiert (hoffentlich) alle Abhängigkeiten des Projekts. Kompilierte lufa wird mitgeliefert.
+
+clean
+löscht alle generierten Dateien.

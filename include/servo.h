@@ -58,6 +58,8 @@ void freeServo(Servo** servo);
 \pre servo is alloced
 
 \return servo state in degrees (0-180), 0 means right
+
+\warning First call this function if you are sure the servo is not moving. Otherwise you will maybe get incorrect values dependend on servospeed.
 */
 u8 getStateServo(Servo* servo);
 
