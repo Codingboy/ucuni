@@ -1,12 +1,13 @@
 /*!
 \file usb.h
 \brief USB handling
-All communication is done by control-transfers.
+All communication is done by control-transfers. If not other described data is send as data packet.
 Syntax is the following:
 [Controlnumber][data]
 
 bmRequestType shall be 0x21
 bRequest shall be SET_LED or CLEAR_LED etc.
+data shall be empty (NULL) if not needed on the device side.
 
 [SET_LED]
 [CLEAR_LED]
@@ -19,7 +20,7 @@ Gets the distance from the ultrasonic sensor ez3 in cm. The returned data is 2 b
 [GET_SERVO]
 Gets the angle of the servo has actually. (1 byte) 0 means it "looks" right, 180 left, 90 straight ahead.
 [SET_SERVO][angle]
-Sets the servo to an angle. 0 means it "looks" right, 180 left, 90 straight ahead.
+Sets the servo to an angle. 0 means it "looks" right, 180 left, 90 straight ahead. The angle shall be sent to the device in the wValue field.
 [GET_SERVO_READY]
 Checks if the servo is in the specified position. If it is not ready the returned data (1 byte) is 0.
 

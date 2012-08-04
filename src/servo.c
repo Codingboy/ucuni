@@ -75,7 +75,7 @@ u8 getStateServo(Servo* servo)
 	cli();
 	u16 diff = _leftAngleTime - _rightAngleTime;
 	float degree = (float)(diff)/(float)(180);
-	float f = (float)(servo->actualAngleTime - _rightAngleTime)/degree;
+	float f = (float)((servo->actualAngleTime - _rightAngleTime))/degree;
 	SREG = tmpSREG;
 	return (u8)f;
 }

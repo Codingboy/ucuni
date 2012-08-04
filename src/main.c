@@ -143,11 +143,10 @@ int main(int argc, char* argv[])
 	measureEZ3(ez3);//calibration
 
 	enableServos();
+	setStateServo(servo, 0);
 	setTime(0);
 	enableTime();
 	u64 time;
-	u8 magic = 0;
-	bool left = true;
 	while (true)
 	{
 		time = getTime();

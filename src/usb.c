@@ -78,11 +78,9 @@ void EVENT_USB_Device_Configuration_Changed()
 
 void usbSetLed()
 {
-	//Endpoint_ClearSETUP();
-	//Endpoint_ClearStatusStage();
 	Endpoint_ClearSETUP();//ack setup packet
 	u8 recvData = 0;
-	while (recvData < 0)
+	while (recvData < 0)//never
 	{
 		while (!Endpoint_IsOUTReceived())
 		{
@@ -126,7 +124,7 @@ void usbClearLed()
 {
 	Endpoint_ClearSETUP();//ack setup packet
 	u8 recvData = 0;
-	while (recvData < 0)
+	while (recvData < 0)//never
 	{
 		while (!Endpoint_IsOUTReceived())
 		{
@@ -146,14 +144,14 @@ void usbSetServo()
 {
 	Endpoint_ClearSETUP();//ack setup packet
 	u8 recvData = 0;
-	u8 value = 0;
-	while (recvData < 1)
+	u8 value = USB_ControlRequest.wValue;
+	while (recvData < 0)//never
 	{
 		while (!Endpoint_IsOUTReceived())
 		{
 			//wait for data
 		}
-		value = Endpoint_Read_8();//read value
+		//value = Endpoint_Read_8();//read value
 		recvData++;
 		Endpoint_ClearOUT();//ack data packet
 	}
