@@ -132,14 +132,10 @@ int main(int argc, char* argv[])
 				buf = (unsigned char*) malloc(2*sizeof(unsigned char));
 //devicehandle, bmRequestType, bRequest, wValue, wIndex, data, wLength, timeout
 				libusb_control_transferRet = libusb_control_transfer(devh, LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_DEVICE | LIBUSB_ENDPOINT_IN, GET_EZ3, 0, 0, buf, 2, 500);
-printf("values: %u %u\n", buf[0], buf[1]);
 				unsigned int temp = buf[0];
 				temp = temp<<8,
 				temp += buf[1];
-				//temp -= 273;
 				printf("-->temperature is %u\n", temp);
-temp -= 273;
-printf("-->temperature is %u\n", temp);
 				free(buf);
 				buf = NULL;
 				break;
