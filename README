@@ -1,5 +1,8 @@
 Im Makefile gibt es verschiedene Optionen, das Projekt zu bauen.
 
+make
+äquivalent zu make installmain
+
 make demo
 bewirkt, dass ein Demoprojekt gebaut wird, das ohne USB-Interface die Funktionalität der Hardware testet.
 Led1 wird leuchtet bis USB initialisiert, falls dies fehlschlägt bitte resetten.
@@ -11,11 +14,14 @@ bewirkt bauen des eigentlichen Projekts, dass ausschließlich über das USB-Inte
 make doku
 bewirkt bauen der Dokumentation im Ordner doc als html latex und manpage
 
-installmain und installdemo
+make installmain und installdemo
 flashen die jeweilige Projektversion.
 
-installdep
+make installdep
 installiert (hoffentlich) alle Abhängigkeiten des Projekts. Kompilierte lufa wird mitgeliefert.
 
-clean
+make clean
 löscht alle generierten Dateien.
+
+make example
+baut ein Beispielanwendungsprogramm zur Ansteuerung des Sensorboards.

@@ -28,10 +28,10 @@ MODULES_=pin pinoperations typedefs led button time usb globals descriptors ez3 
 MODULES=$(addsuffix .o, $(addprefix $(OBJ)/, $(MODULES_)))
 CFLAGS=-Wall -g -c -std=c99 -Os -fpic -DPIC -I$(INCLUDE) -I$(LUFA_PATH)/Drivers/USB -I$(LUFA_PATH)/Drivers/USB/Core/AVR8 -I$(LUFA_PATH) $(CONTROLLER) -DF_CPU=$(F_CPU) -DF_USB=$(F_USB) -DMCU=$(MCU) -DARCH=$(ARCH) -DBOARD=$(BOARD) -DF_CLOCK=$(F_CLOCK) -DUSE_FLASH_DESCRIPTORS -DUSE_STATIC_OPTIONS="(USE_DEVICE_OPT_FULLSPEED | USB_OPT_AUTO_PLL)" -DUSB_DEVICE_ONLY
 
-installdemo: $(BIN)/demo.hex
+installmain: $(BIN)/main.hex
 	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U flash:w:$<:i
 
-installmain: $(BIN)/main.hex
+installdemo: $(BIN)/demo.hex
 	avrdude -p m32u4 -P /dev/ttyACM0 -c avr109 -U flash:w:$<:i
 
 main: $(BIN)/main.hex
@@ -77,3 +77,9 @@ doku: $(INCLUDE)/ $(DOC)/html/index.html
 
 $(DOC):
 	doku
+
+example: $(BIN)/example
+
+$(BIN)/example: $(SRC)/example.c
+	$(MKDIR) $(BIN)
+	gcc -Wall -g -std=c99 -Os -o $@ $< -lusb-1.0 -I/usr/include/libusb-1.0
