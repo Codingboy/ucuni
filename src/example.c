@@ -11,6 +11,7 @@
 #define GET_SERVO ('F')
 #define SET_SERVO ('G')
 #define GET_SERVO_READY ('H')
+#define GET_TEMPERATURE ('I')
 
 int main(int argc, char* argv[])
 {
@@ -41,6 +42,7 @@ int main(int argc, char* argv[])
 		printf("5	get servo\n");
 		printf("6	set servo\n");
 		printf("7	get servo ready\n");
+		printf("8	get temperature\n");
 		scanf("%u", &command);
 		if (command < 0)
 		{
@@ -111,7 +113,7 @@ int main(int argc, char* argv[])
 			case 6:
 				buf = (unsigned char*) malloc(sizeof(unsigned char));
 				printf("enter angle in degrees\n");
-				scanf("%u", &(buf[0]));
+				scanf("%u", buf);
 //devicehandle, bmRequestType, bRequest, wValue, wIndex, data, wLength, timeout
 				libusb_control_transferRet = libusb_control_transfer(devh, LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_DEVICE | LIBUSB_ENDPOINT_OUT, SET_SERVO, buf[0], 0, NULL, 0, 500);
 				printf("-->servo was set to %u degrees\n", buf[0]);
@@ -126,6 +128,22 @@ int main(int argc, char* argv[])
 				free(buf);
 				buf = NULL;
 				break;
+			case 8:
+				buf = (unsigned char*) malloc(2*sizeof(unsigned char));
+//devicehandle, bmRequestType, bRequest, wValue, wIndex, data, wLength, timeout
+				libusb_control_transferRet = libusb_control_transfer(devh, LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_DEVICE | LIBUSB_ENDPOINT_IN, GET_EZ3, 0, 0, buf, 2, 500);
+printf("values: %u %u\n", buf[0], buf[1]);
+				unsigned int temp = buf[0];
+				temp = temp<<8,
+				temp += buf[1];
+				//temp -= 273;
+				printf("-->temperature is %u\n", temp);
+temp -= 273;
+printf("-->temperature is %u\n", temp);
+				free(buf);
+				buf = NULL;
+				break;
+
 		}
 		switch (libusb_control_transferRet)
 		{

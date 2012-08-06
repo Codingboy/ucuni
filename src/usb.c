@@ -8,6 +8,7 @@
 #include "button.h"
 #include "servo.h"
 #include "ez3.h"
+#include "temperature.h"
 
 extern Led* led2;
 extern Button* but1;
@@ -58,6 +59,9 @@ void EVENT_USB_Device_ControlRequest(void)
 					break;
 				case GET_SERVO_READY:
 					usbGetServoReady();
+					break;
+				case GET_TEMPERATURE:
+					usbGetTemperature();
 					break;
 //				default:
 //					Endpoint_ClearStatusStage();
@@ -259,4 +263,31 @@ void usbGetServoReady()
 	}
 	//Endpoint_ClearOUT();//send message
 	//Endpoint_ClearStatusStage();//success :D
+}
+
+void usbGetTemperature()
+{
+	Endpoint_ClearSETUP();//ack setup packet
+	u8 sendData = 0;
+	measureTemperature();
+	while (sendData < 2)
+	{
+		while (!Endpoint_IsINReady())
+		{
+			//wait until host is ready
+		}
+		u16 value = measureTemperature();
+		Endpoint_Write_8(value>>8);
+		sendData++;
+		Endpoint_Write_8(value & 0xff);
+		sendData++;
+		Endpoint_ClearIN();
+	}
+	//while (!Endpoint_IsOUTReceived())
+	{
+		//wait for host to send status
+	}
+	//Endpoint_ClearOUT();//send message
+	//Endpoint_ClearStatusStage();//success :D
+
 }

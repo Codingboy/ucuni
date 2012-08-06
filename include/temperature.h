@@ -4,6 +4,6 @@
 #include "typedefs.h"
 
 void initTemperature();
-u8 measureTemperature();
+u16 measureTemperature();
 
 #endif

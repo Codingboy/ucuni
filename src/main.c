@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include "ez3.h"
 #include "servo.h"
+#include "temperature.h"
 
 extern Led* led1;
 extern Led* led2;
@@ -147,6 +148,7 @@ int main(int argc, char* argv[])
 	setTime(0);
 	enableTime();
 	u64 time;
+initTemperature();
 	while (true)
 	{
 		time = getTime();
