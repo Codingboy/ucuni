@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
 	libusb_device_handle* devh = libusb_open_device_with_vid_pid(NULL, 0x1337, 0x1337);
 	if (devh == NULL)
 	{
-		printf("%s %s %u: libusb_open_device_with_vid_pid() failed\n", __FILE__, __func__, __LINE__);
+		printf("%s %s %u: libusb_open_device_with_vid_pid() failed: need to be root\n", __FILE__, __func__, __LINE__);
 		return -1;
 	}
-	libusb_device* dev = libusb_get_device(devh);
+	//libusb_device* dev = libusb_get_device(devh);
 	int command = 0;
 	int libusb_control_transferRet = 0;
 	while (true)
@@ -155,6 +155,11 @@ int main(int argc, char* argv[])
 				printf("no dev\n");
 				printf("%s %s %u: libusb_control_transfer() failed\n", __FILE__, __func__, __LINE__);
 				break;
+			default:
+				if (libusb_control_transferRet < 0)
+				{
+					printf("%s %s %u: libusb_control_transfer() failed\n", __FILE__, __func__, __LINE__);
+				}
 		}
 
 	}
